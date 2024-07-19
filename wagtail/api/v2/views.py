@@ -112,6 +112,9 @@ class BaseAPIViewSet(GenericViewSet):
                     self.__class__.__name__
                 )
             )
+            
+        if "fields" in request.GET:
+            url = f"{url}?fields={request.GET["fields"]}"
 
         return redirect(url)
 
