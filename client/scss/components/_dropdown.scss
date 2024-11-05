@@ -1,9 +1,9 @@
 .w-dropdown__toggle {
-  @apply w-px-2 w-text-text-label w-bg-transparent;
+  @apply w-px-2 w-text-text-label w-bg-transparent w-border-2 w-border-transparent;
 }
 
 .w-dropdown__toggle--icon {
-  @apply w-w-8 w-h-8;
+  @apply w-w-8 w-h-8 more-contrast:w-p-0 more-contrast:w-border more-contrast:w-rounded-sm more-contrast:w-border-border-interactive-more-contrast hover:more-contrast:w-border-border-interactive-more-contrast-hover;
 }
 
 .w-dropdown__toggle-icon {

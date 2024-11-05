@@ -10,7 +10,7 @@ from django.utils import timezone
 from freezegun import freeze_time
 
 from wagtail.admin.models import EditingSession
-from wagtail.models import GroupPagePermission, Page
+from wagtail.models import GroupPagePermission, Page, Workflow, WorkflowContentType
 from wagtail.test.testapp.models import (
     Advert,
     AdvertWithCustomPrimaryKey,
@@ -969,6 +969,45 @@ class TestPingView(WagtailTestUtils, TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
+    def test_moderator_without_explicit_edit_permission_on_page(self):
+        # submit page for moderation
+        workflow = self.page.get_workflow()
+        workflow.start(self.page, self.other_user)
+
+        # Revoke all page permissions from the Moderators group, so that the workflow is
+        # the only thing granting them access to the page
+        moderators = Group.objects.get(name="Moderators")
+        moderators.page_permissions.all().delete()
+
+        # make user a moderator
+        self.user.is_superuser = False
+        self.user.save()
+        self.user.groups.add(moderators)
+
+        # access to the ping endpoint should be granted
+        response = self.client.post(
+            reverse(
+                "wagtailadmin_editing_sessions:ping",
+                args=("wagtailcore", "page", self.page.id, self.session.id),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_locked_page(self):
+        self.page.locked = True
+        self.page.locked_by = self.other_user
+        self.page.locked_at = TIMESTAMP_PAST
+        self.page.save()
+
+        # access to the ping endpoint should be granted
+        response = self.client.post(
+            reverse(
+                "wagtailadmin_editing_sessions:ping",
+                args=("wagtailcore", "page", self.page.id, self.session.id),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
     @freeze_time(TIMESTAMP_NOW)
     def test_ping_snippet_model(self):
         snippet = Advert.objects.create(text="Test snippet")
@@ -1060,6 +1099,69 @@ class TestPingView(WagtailTestUtils, TestCase):
             )
         )
         self.assertEqual(response.status_code, 404)
+
+    def test_moderator_without_explicit_edit_permission_on_snippet(self):
+        snippet = FullFeaturedSnippet.objects.create(text="Test snippet")
+        snippet.save_revision(user=self.other_user)
+
+        # Assign default workflow to the snippet model
+        snippet_content_type = ContentType.objects.get_for_model(FullFeaturedSnippet)
+        workflow = Workflow.objects.get()
+        WorkflowContentType.objects.create(
+            content_type=snippet_content_type,
+            workflow=workflow,
+        )
+
+        # submit snippet for moderation
+        workflow = snippet.get_workflow()
+        workflow.start(snippet, self.other_user)
+
+        # make user a moderator. The Moderators group has no explicit permission over the
+        # FullFeaturedSnippet model, and is only granted access to it via the workflow
+        moderators = Group.objects.get(name="Moderators")
+        self.user.is_superuser = False
+        self.user.save()
+        self.user.groups.add(moderators)
+
+        session = EditingSession.objects.create(
+            user=self.user,
+            content_type=ContentType.objects.get_for_model(FullFeaturedSnippet),
+            object_id=snippet.pk,
+            last_seen_at=TIMESTAMP_1,
+        )
+
+        # access to the ping endpoint should be granted
+        response = self.client.post(
+            reverse(
+                "wagtailadmin_editing_sessions:ping",
+                args=("tests", "fullfeaturedsnippet", snippet.id, session.id),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_locked_snippet(self):
+        snippet = FullFeaturedSnippet.objects.create(text="Test snippet")
+
+        snippet.locked = True
+        snippet.locked_by = self.other_user
+        snippet.locked_at = TIMESTAMP_PAST
+        snippet.save()
+
+        session = EditingSession.objects.create(
+            user=self.user,
+            content_type=ContentType.objects.get_for_model(FullFeaturedSnippet),
+            object_id=snippet.pk,
+            last_seen_at=TIMESTAMP_1,
+        )
+
+        # access to the ping endpoint should be granted
+        response = self.client.post(
+            reverse(
+                "wagtailadmin_editing_sessions:ping",
+                args=("tests", "fullfeaturedsnippet", snippet.id, session.id),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
 
     def test_must_post(self):
         response = self.client.get(

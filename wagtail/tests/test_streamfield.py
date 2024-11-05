@@ -237,6 +237,24 @@ class TestStreamValueAccess(TestCase):
         self.assertEqual(fetched_body[1].block_type, "text")
         self.assertEqual(fetched_body[1].value, "bar")
 
+    def test_can_append_on_queried_instance(self):
+        # The test is analog to test_can_append(), but instead of working with the
+        # in-memory version from JSONStreamModel.objects.create(), we query a fresh
+        # instance from the db.
+        # It tests adding data to child blocks that
+        # have not yet been lazy loaded. This would previously crash.
+        self.json_body = JSONStreamModel.objects.get(pk=self.json_body.pk)
+        self.json_body.body.append(("text", "bar"))
+        self.json_body.save()
+
+        fetched_body = JSONStreamModel.objects.get(id=self.json_body.id).body
+        self.assertIsInstance(fetched_body, StreamValue)
+        self.assertEqual(len(fetched_body), 2)
+        self.assertEqual(fetched_body[0].block_type, "text")
+        self.assertEqual(fetched_body[0].value, "foo")
+        self.assertEqual(fetched_body[1].block_type, "text")
+        self.assertEqual(fetched_body[1].value, "bar")
+
     def test_complex_assignment(self):
         page = StreamPage(title="Test page", body=[])
         page.body = [
@@ -910,6 +928,41 @@ class TestDeconstructStreamFieldWithLookup(TestCase):
                 "block_lookup": {
                     0: ("wagtail.blocks.CharBlock", (), {"required": True}),
                     1: ("wagtail.blocks.ListBlock", (0,), {}),
+                },
+            },
+        )
+
+    def test_deconstruct_with_listblock_with_child_block_kwarg(self):
+        field = StreamField(
+            [
+                ("heading", blocks.CharBlock(required=True)),
+                (
+                    "bullets",
+                    blocks.ListBlock(child_block=blocks.CharBlock(required=True)),
+                ),
+            ],
+            blank=True,
+        )
+        field.set_attributes_from_name("body")
+        name, path, args, kwargs = field.deconstruct()
+        self.assertEqual(name, "body")
+        self.assertEqual(path, "wagtail.fields.StreamField")
+        self.assertEqual(
+            args,
+            [
+                [
+                    ("heading", 0),
+                    ("bullets", 1),
+                ]
+            ],
+        )
+        self.assertEqual(
+            kwargs,
+            {
+                "blank": True,
+                "block_lookup": {
+                    0: ("wagtail.blocks.CharBlock", (), {"required": True}),
+                    1: ("wagtail.blocks.ListBlock", (), {"child_block": 0}),
                 },
             },
         )

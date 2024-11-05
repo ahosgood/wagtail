@@ -44,7 +44,6 @@ module.exports = function exports(env, argv) {
       'page-chooser-modal',
       'page-chooser',
       'page-chooser-telepath',
-      'preview-panel',
       'privacy-switch',
       'sidebar',
       'task-chooser-modal',
@@ -61,6 +60,7 @@ module.exports = function exports(env, argv) {
       'image-chooser',
       'image-chooser-modal',
       'image-chooser-telepath',
+      'image-block',
     ],
     'documents': [
       'document-chooser',

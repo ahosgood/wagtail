@@ -2,7 +2,7 @@
 
 The most common use for adding custom views to the Wagtail admin is to provide an interface for managing a Django model. Using [](snippets), Wagtail provides ready-made views for listing, creating, and editing Django models with minimal configuration.
 
-For other kinds of admin views that don't fit this pattern, you can write your own Django views and register them as part of the Wagtail admin through [hooks](admin_hooks). In this example, we'll implement a view that displays a calendar for the current year, using [the calendar module](https://docs.python.org/3/library/calendar.html) from Python's standard library.
+For other kinds of admin views that don't fit this pattern, you can write your own Django views and register them as part of the Wagtail admin through [hooks](admin_hooks). In this example, we'll implement a view that displays a calendar for the current year, using [the calendar module](inv:python#library/calendar) from Python's standard library.
 
 ## Defining a view
 
@@ -75,22 +75,17 @@ def index(request):
     })
 ```
 
-Now create a `templates/wagtailcalendar/` folder within the `wagtailcalendar` app, containing `index.html` as follows:
+Now create a `templates/wagtailcalendar/` folder within the `wagtailcalendar` app, containing `index.html` and `calendar.css` as follows:
 
 ```html+django
 {% extends "wagtailadmin/base.html" %}
+{% load static %}
+
 {% block titletag %}{{ current_year }} calendar{% endblock %}
 
 {% block extra_css %}
     {{ block.super }}
-    <style>
-        table.month {
-            margin: 20px;
-        }
-        table.month td, table.month th {
-            padding: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -100,6 +95,18 @@ Now create a `templates/wagtailcalendar/` folder within the `wagtailcalendar` ap
         {{ calendar_html|safe }}
     </div>
 {% endblock %}
+```
+
+```css
+/* calendar.css */
+table.month {
+    margin: 20px;
+}
+
+table.month td,
+table.month th {
+    padding: 5px;
+}
 ```
 
 Here we are overriding three of the blocks defined in the base template: `titletag` (which sets the content of the HTML `<title>` tag), `extra_css` (which allows us to provide additional CSS styles specific to this page), and `content` (for the main content area of the page). We're also including the standard header bar component, and setting a title and icon. For a list of the recognized icon identifiers, see the [style guide](styleguide).
@@ -190,7 +197,7 @@ def register_calendar_url():
 
 The calendar will now be visible at the URL `/admin/calendar/month/`.
 
-![A single calender month](../_static/images/adminviews_calendarmonth.png)
+![A single calendar month](../_static/images/adminviews_calendarmonth.png)
 
 Finally, we can alter our `wagtail_hooks.py` to include a group of custom menu items. This is similar to adding a single item but involves importing two more classes, `Menu` and `SubmenuMenuItem`.
 
@@ -246,7 +253,7 @@ class CalendarViewSet(ViewSet):
     menu_label = "Calendar"
     icon = "date"
     # The `name` will be used for both the URL prefix and the URL namespace.
-    # They can be customised individually via `url_prefix` and `url_namespace`.
+    # They can be customized individually via `url_prefix` and `url_namespace`.
     name = "calendar"
 
     def get_urlpatterns(self):
@@ -400,7 +407,7 @@ To find the url for any model in the admin the `AdminURLFinder` class can be use
 ```python
 from wagtail.admin.admin_url_finder import AdminURLFinder
 
-finder = AdminURLFinder
+finder = AdminURLFinder()
 
 finder.get_edit_url(model_instance)
 ```

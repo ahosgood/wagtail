@@ -1,4 +1,4 @@
-# Advanced topics
+# Advanced
 
 ```{toctree}
 ---
@@ -8,12 +8,12 @@ images/index
 documents/index
 icons
 embeds
+tags
 add_to_django_project
-deploying
 performance
 i18n
 privacy
-customisation/index
+customization/index
 third_party_tutorials
 testing
 api/index

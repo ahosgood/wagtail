@@ -743,7 +743,6 @@
 * Sandro Rodrigues
 * Brian Mugo
 * Panagiotis H.M. Issaris
-* Damilola Oladele
 * Olumide Micheal
 * Chiemezuo Akujobi
 * Krish Soni
@@ -827,6 +826,33 @@
 * Romein van Buren
 * Chris Shenton
 * Nathanaël Jourdane
+* Vaughn Dickson
+* Ansuman Shukla
+* Nayanshi Singh
+* Daniel Black
+* Atif Khan
+* Sanjeev Holla S
+* Shubham Mukati
+* Matthew Scouten
+* Ishwari8104
+* Rahul Samant
+* Gabriel Getzie
+* Rohit Singh
+* Robin Varghese
+* Victoria Ottah
+* Bart Cieliński
+* alexkiro
+* Ankit Kumar
+* Frank Yiu
+* Shaurya Panchal
+* Sumana Sree Angajala
+* Srishti Jaiswal
+* Alessandro Chitarrini
+* Joel William
+* Ataf Fazledin Ahamed
+* Ayaan Qadri
+* manu
+* Aayushman Singh
 
 ## Translators
 
@@ -847,7 +873,7 @@
 * Czech: Ales Dvorak, Jan Feřtek, Martin Galda, IT Management, Tomáš Jeřábek, Vláďa Macek, Eva Mikesova, Mořeplavec, Sophy O, Martina Oleksakova, Kryštof Pilnáček, Tomáš Podivínský, Ivan Pomykacz, Jiri Stepanek, Marek Turnovec, Mirek Zvolský
 * Danish: Benjamin Bach, Mads Kronborg, MRostgaard, Asger Sørensen
 * Divehi: Fauzaan Gasim
-* Dutch: benny_AT_it_digin.com, Bram, Ramon de Jezus Brecht Dervaux, Harmen, Storm Heg, Kees Hink, Huib Keemink, Franklin Kingma, Maarten Kling, Thijs Kramer, Samuel Leeuwenburg, mahulst, Meteor0id, Rob Moorman, Benjamin van Renterghem, Michael van Tellingen, Arne Turpyn, Coen van der Kamp
+* Dutch: benny_AT_it_digin.com, Bram, Ramon de Jezus Brecht Dervaux, Harmen, Storm Heg, Kees Hink, Huib Keemink, Franklin Kingma, Maarten Kling, Thijs Kramer, Samuel Leeuwenburg, mahulst, Meteor0id, Rob Moorman, Benjamin van Renterghem, Michael van Tellingen, Arne Turpyn, Coen van der Kamp, Richard Voorhorst
 * English (India): Neeraj PY, Apoorv Saini
 * Estonian: Erlend Eelmets, Martin, Ragnar Rebase
 * Finnish: Jiri Grönroos, Eetu Häivälä, Niklas Jerva, Aarni Koskela, Rauli Laine, Valter Maasalo, Glen Somerville, Juha Yrjölä
@@ -887,5 +913,6 @@
 * Turkish: Saadettin Yasir Akel, Umut Bektaş, Halit Çelik, Zafer Cengiz, Cihad Gündoǧdu, Basitlik İyidir, Fatih Koç koç, José Luis, Py Data, Ahmet Sarıcan, Halim Turan, Ragıp Ünal, Suayip Uzulmez
 * Turkish (Türkiye): Saadettin Yasir Akel, Basitlik İyidir, Umut Bektaş, Aydın Zafer Cengiz, lzm dgl, Cihad Gündoǧdu, Ahmet Serdar Karadeniz, Fatih Koç koç, José Luis, Py Data, Halim Turan, Ragıp Ünal
 * Ukrainian: Yuri Fabirovsky, Vladislav Herasimenko, Mikolai Incognito, Anastasiia La, Sergiy Shkodenko, Viktor Shytiuk, Ivan Tyshchenko, Zoriana Zaiats, Mykola Zamkovoi
+* Uyghur: Abduqadir Abliz, Azat
 * Vietnamese: Amelia Dao, Duc Huynh, Hồng Quân Nguyễn, Luan Nguyen, Vu Pham, stdpi
-* Welsh: Philip Crisp, Adam Hughes
+* Welsh: Philip Lindsay-Crisp, Adam Hughes
