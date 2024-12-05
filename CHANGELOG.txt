@@ -4,11 +4,14 @@ Changelog
 6.4 (xx.xx.xxxx) - IN DEVELOPMENT
 ~~~~~~~~~~~~~~~~
 
+ * Add search terms report (Noah van der Meer, Sage Abdullah)
  * Add the ability to apply basic Page QuerySet optimizations to `specific()` sub-queries using `select_related` & `prefetch_related` (Andy Babic)
  * Increase `DATA_UPLOAD_MAX_NUMBER_FIELDS` in project template (Matt Westcott)
  * Stop invalid Site hostname records from breaking preview (Matt Westcott)
  * Set sensible defaults for InlinePanel heading and label (Matt Westcott)
- * Limit tags autocompletion to 10 items to avoid performance issues with large number of matching tags (Aayushman Singh)
+ * Limit tags autocompletion to 10 items and add delay to avoid performance issues with large number of matching tags (Aayushman Singh)
+ * Add the ability to restrict what types of requests a Pages supports via `allowed_http_methods` (Andy Babic)
+ * Allow plain strings in panel definitions as shorthand for `FieldPanel` / `InlinePanel` (Matt Westcott)
  * Fix: Improve handling of translations for bulk page action confirmation messages (Matt Westcott)
  * Fix: Ensure custom rich text feature icons are correctly handled when provided as a list of SVG paths (Temidayo Azeez, Joel William, LB (Ben) Johnston)
  * Fix: Ensure manual edits to `StreamField` values do not throw an error (Stefan Hammer)
@@ -17,6 +20,17 @@ Changelog
  * Fix: Ensure form builder supports custom admin form validation (John-Scott Atlakson, LB (Ben) Johnston)
  * Fix: Ensure form builder correctly checks for duplicate field names when using a custom related name (John-Scott Atlakson, LB (Ben) Johnston)
  * Fix: Normalize `StreamField.get_default()` to prevent creation forms from breaking (Matt Westcott)
+ * Fix: Prevent out-of-order migrations from skipping creation of image/document choose permissions (Matt Westcott)
+ * Fix: Use correct connections on multi-database setups in database search backends (Jake Howard)
+ * Fix: Ensure Cloudfront cache invalidation is called with a list, for compatibility with current botocore versions (Jake Howard)
+ * Fix: Show the correct privacy status in the sidebar when creating a new page (Joel William)
+ * Fix: Prevent generic model edit view from unquoting non-integer primary keys multiple times (Matt Westcott)
+ * Fix: Ensure comments are functional when editing Page models with `read_only` `Fieldpanel`s in use (Strapchay)
+ * Fix: Ensure the accessible labels and tooltips reflect the correct private/public status on the live link button within pages after changing the privacy (Ayaan Qadri)
+ * Fix: Fix empty `th` (table heading) elements that are not compliant with accessibility standards (Jai Vignesh J)
+ * Fix: Ensure `MultipleChooserPanel` using images or documents work when nested within an `InlinePanel` when no other choosers are in use within the model (Elhussein Almasri)
+ * Fix: Ensure `MultipleChooserPanel` works after doing a search in the page chooser modal (Matt Westcott)
+ * Fix: Ensure new `ListBlock` instances get created with unique IDs in the admin client for accessibility and mini-map element references (Srishti Jaiswal)
  * Docs: Move the model reference page from reference/pages to the references section as it covers all Wagtail core models (Srishti Jaiswal)
  * Docs: Move the panels reference page from references/pages to the references section as panels are available for any model editing, merge panels API into this page (Srishti Jaiswal)
  * Docs: Move the tags documentation to standalone advanced topic, instead of being inside the reference/pages section (Srishti Jaiswal)
@@ -33,6 +47,16 @@ Changelog
  * Docs: Replace absolute URLs with intersphinx links where possible to avoid broken links (Sage Abdullah)
  * Docs: Update upgrading guide and release process to better reflect the current practices (Sage Abdullah)
  * Docs: Document usage of custom validation for admin form pages when using `AbstractEmailForm` or `AbstractForm` pages (John-Scott Atlakson, LB (Ben) Johnston)
+ * Docs: Reword `BlogTagIndexPage` example for clarity (Clifford Gama)
+ * Docs: Change title of blog index page in tutorial to avoid slug issues (Thibaud Colas)
+ * Docs: Fix `wagtailcache` and `wagtailpagecache` examples to not use quotes for the `fragment_name` (Shiv)
+ * Docs: Update tutorial to reflect the move of the "Add child page" action to a top-level button in the header as a '+' icon (Clifford Gama)
+ * Docs: Fix link to `HTTPMethod` in `Page.handle_options_request()` docs (Sage Abdullah)
+ * Docs: Improve the Pages Theory page with added & more consistent section headings and admonitions to aid in readability (Clifford Gama)
+ * Docs: Fix non-functional link to the community guidelines in the Your first contribution page (Ankit Kumar)
+ * Docs: Introduce tags and filters by name in "Writing templates" docs (Clifford Gama)
+ * Docs: Add a new headless section to the documentation, incorporating parts of the 'are we headless' website content (Sævar Öfjörð Magnússon, Alex Fulcher)
+ * Docs: Fix Django HTML syntax formatting issue on the documents overview page (LB (Ben) Johnston)
  * Maintenance: Close open files when reading within utils/setup.py (Ataf Fazledin Ahamed)
  * Maintenance: Avoid redundant `ALLOWED_HOSTS` check in `Site.find_for_request` (Jake Howard)
  * Maintenance: Update `CloneController` to ensure that `added`/`cleared` events are not dispatched as cancelable (LB (Ben) Johnston)
@@ -45,12 +69,45 @@ Changelog
  * Maintenance: Remove unused Rangy JS library (LB (Ben) Johnston)
  * Maintenance: Update `PreviewController` usage to leverage Stimulus actions instead of calling `preventDefault` manually (Ayaan Qadri)
  * Maintenance: Various performance optimizations to page publishing (Jake Howard)
+ * Maintenance: Remove unnecessary DOM canvas.toBlob polyfill (LB (Ben) Johnston)
+ * Maintenance: Ensure Storybook core files are correctly running through Eslint (LB (Ben) Johnston)
+ * Maintenance: Add a new Stimulus `ZoneController` (`w-zone`) to support dynamic class name changes & event handling on container elements (Ayaan Qadri)
+ * Maintenance: Migrate jQuery class toggling & drag/drop event handling within the multiple upload views to the Stimulus ZoneController usage (Ayaan Qadri)
+ * Maintenance: Test project template for warnings when run against Django pre-release versions (Sage Abdullah)
+ * Maintenance: Refactor redirects create/delete views to use generic views (Sage Abdullah)
+ * Maintenance: Add JSDoc description, adopt linting recommendations, and add more unit tests for `ModalWorkflow` (LB (Ben) Johnston)
+ * Maintenance: Add support for for a `delay` value in `TagController` to debounce async autocomplete tag fetch requests (Aayushman Singh)
+ * Maintenance: Add unit tests, Storybook stories & JSDoc items for the Stimulus `DrilldownController` (Srishti Jaiswal)
+ * Maintenance: Enhance sidebar preview performance by eliminating duplicate asset loads on preview error (Sage Abdullah)
+ * Maintenance: Remove unused `LinkController` (`w-link`) (Sage Abdullah)
+ * Maintenance: Refactor settings `EditView` to make better use of generic `EditView` (Sage Abdullah)
+ * Maintenance: Add a new Stimulus `RulesController` (`w-rules`) to support declarative conditional field enabling from other field values in a form (LB (Ben) Johnston)
+ * Maintenance: Migrate the conditional enabling of fields in the image URL builder view away from ad-hoc jQuery to use the `RulesController` (`w-rules`) approach (LB (Ben) Johnston)
+ * Maintenance: Enhance the Stimulus `ZoneController` (`w-zone`) to support inactive class and a mechanism to switch the mode based on data within events (Ayaan Qadri)
+ * Maintenance: Use the Stimulus `ZoneController` (`w-zone`) to remove ad-hoc jQuery for the privacy switch when toggling visibility of private/public elements (Ayaan Qadri)
+ * Maintenance: Remove unused `is_active` & `active_menu_items` from `wagtail.admin.menu.MenuItem` (Srishti Jaiswal)
+ * Maintenance: Only call `openpyxl` at runtime to improve performance for projects that do not use `ReportView`, `SpreadsheetExportMixin` and `wagtail.contrib.redirects` (Sébastien Corbin)
 
 
-6.3.1 (xx.xx.20xx) - IN DEVELOPMENT
+6.3.2 (xx.xx.xxxx) - IN DEVELOPMENT
+~~~~~~~~~~~~~~~~~~
+
+ * Fix: Ensure Cloudfront cache invalidation is called with a list, for compatibility with current botocore versions (Jake Howard)
+ * Fix: Ensure Draftail features wrap when a large amount of features are added (Bart Cieliński)
+ * Docs: Update tutorial to reflect the move of the "Add child page" action to a top-level button in the header as a '+' icon (Clifford Gama)
+
+
+6.3.1 (19.11.2024)
 ~~~~~~~~~~~~~~~~~~
 
  * Fix: Restore ability to upload profile picture through account settings (Sage Abdullah)
+ * Fix: Correctly handle `ImageChooserBlock` to `ImageBlock` data conversions where all inputs to `bulk_to_python` are null (Storm Heg, Matt Westcott)
+ * Fix: Improve spacing of page / collection permissions table in Group settings (Sage Abdullah)
+ * Fix: Remove forced capitalization of site name on admin dashboard (Thibaud Colas)
+ * Docs: Reword `BlogTagIndexPage` example for clarity (Clifford Gama)
+ * Docs: Change title of blog index page in tutorial to avoid slug issues (Thibaud Colas)
+ * Docs: Fix `wagtailcache` and `wagtailpagecache` examples to not use quotes for the `fragment_name` (Shiv)
+ * Docs: Lower search result ranking for release notes on readthedocs search (Sage Abdullah)
 
 
 6.3 LTS (01.11.2024)
