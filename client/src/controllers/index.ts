@@ -12,6 +12,7 @@ import { DialogController } from './DialogController';
 import { DismissibleController } from './DismissibleController';
 import { DrilldownController } from './DrilldownController';
 import { DropdownController } from './DropdownController';
+import { FormsetController } from './FormsetController';
 import { InitController } from './InitController';
 import { KeyboardController } from './KeyboardController';
 import { OrderableController } from './OrderableController';
@@ -31,6 +32,7 @@ import { TooltipController } from './TooltipController';
 import { UnsavedController } from './UnsavedController';
 import { UpgradeController } from './UpgradeController';
 import { ZoneController } from './ZoneController';
+import { LocaleController } from './LocaleController';
 
 /**
  * Important: Only add default core controllers that should load with the base admin JS bundle.
@@ -49,8 +51,10 @@ export const coreControllerDefinitions: Definition[] = [
   { controllerConstructor: DismissibleController, identifier: 'w-dismissible' },
   { controllerConstructor: DrilldownController, identifier: 'w-drilldown' },
   { controllerConstructor: DropdownController, identifier: 'w-dropdown' },
+  { controllerConstructor: FormsetController, identifier: 'w-formset' },
   { controllerConstructor: InitController, identifier: 'w-init' },
   { controllerConstructor: KeyboardController, identifier: 'w-kbd' },
+  { controllerConstructor: LocaleController, identifier: 'w-locale' },
   { controllerConstructor: OrderableController, identifier: 'w-orderable' },
   { controllerConstructor: PreviewController, identifier: 'w-preview' },
   { controllerConstructor: ProgressController, identifier: 'w-progress' },
